@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+            integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <meta charset="UTF-8">
+    <title>Signup Page</title>
+    <script>
+
+        function sign_up() {
+            let nickname = $("#sign-nickname").val();
+            let password = $("#sign-password").val();
+            let password2 = $("#sign-password2").val();
+
+            $.ajax({
+                type       : "POST",
+                contentType: "application/json; charset=utf-8",
+                datatype   : "JSON",
+                url        : "/signup",
+                data       : JSON.stringify({nickname: nickname, password: password, confirmPassword: password2}),
+                success    : function (response) {
+                    console.log(response)
+                    alert("회원가입성공 !", function () {
+                        window.location.replace("/login.html");
+                    })
+
+                },
+                error : function (error) {
+                    if (error.responseJSON.errorMessage === "이미 로그인이 되어있습니다."){
+                        alert(error.responseJSON.errorMessage)
+                        window.location.href = "/post.html";
+                    } else {
+                        alert(error.responseJSON.errorMessage)
+                    }
+            }});
+        }
+    </script>
+</head>
+<body>
+<h1>Sign up Page</h1>
+<div>
+    <input type="text" id="sign-nickname" placeholder="your nickname"/>
+    <input type="password" id="sign-password" placeholder="your password"/>
+    <input type="password" id="sign-password2" placeholder="confirm your password"/>
+    <button onclick="sign_up()" name="signup">signup</button>
+    <button onclick="window.location.href='/login.html'" name="cancel">cancel</button>
+</div>
+</body>
+
+</html>

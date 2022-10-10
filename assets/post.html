@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.1.js"
+            integrity="sha256-3zlB5s2uwoUzrXK3BT7AX3FyvojsraNFxCc2vC/7pNI=" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <meta charset="UTF-8">
+    <title>Post Page</title>
+    <style>
+        .fa {
+            font-size: 50px;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        .fa:hover {
+            color: darkblue;
+        }
+
+
+    </style>
+    <script>
+
+        $(document).ready(function () {
+            get_list();
+        });
+
+        function create_post() {
+            const post_title = $("#post-title").val();
+            const post_content = $("#post-content").val();
+
+            $.ajax({
+                type       : "POST",
+                contentType: "application/json; charset=utf-8",
+                url        : "/posts",
+                data       : JSON.stringify({title: post_title, content: post_content}),
+                dataType   : "json",
+                success    : function (response) {
+                    alert(response["message"]);
+                    window.location.reload("/post.html");
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+
+
+            });
+        }
+
+        function get_likes() {
+            $.ajax({
+                type    : "GET",
+                url     : "/likes",
+                data    : {},
+                dataType: "json",
+                success : function (response) {
+                    $("#like-posts").empty();
+                    let rows = response;
+                    for (let i = 0; i < rows.length; i++) {
+                        let title = rows[i]["title"];
+                        let postId = rows[i]["postId"];
+                        let nickname = rows[i]["nickname"];
+                        let createdAt = rows[i]["createdAt"];
+
+                        let temp_html = `<li><a href="#" onclick="get_info(${postId})">${title}[작성자 : ${nickname} - ${createdAt}]</a></li>`;
+
+                        $("#like-posts").append(temp_html);
+                    }
+                },
+                error   : function (error) {
+                    alert(error["errorMessage"]);
+                }
+            });
+        }
+
+        function toggle_like(postId) {
+            $.ajax({
+                type    : "GET",
+                url     : `/likes/${postId}`,
+                data    : {},
+                dataType: "json",
+                success : function (response) {
+                    window.location.reload("/post.html");
+                }
+            });
+        }
+
+        function delete_comment(commentId) {
+            $.ajax({
+                type    : "DELETE",
+                url     : `/comments/${commentId}`,
+                data    : {},
+                dataType: "json",
+                success : function (response) {
+                    alert(response["message"]);
+                    window.location.reload("/post.html");
+                },
+                error   : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        }
+
+        function update_comment(commentId, comment) {
+            $.ajax({
+                type       : "PATCH",
+                contentType: "application/json; charset=utf-8",
+                url        : `/comments/${commentId}`,
+                data       : JSON.stringify({comment: comment}),
+                dataType   : "json",
+                success    : function (response) {
+                    alert(response["message"]);
+                    window.location.reload("/post.html");
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        };
+
+        function create_comment(postId, comment) {
+            $.ajax({
+                type       : "POST",
+                contentType: "application/json; charset=utf-8",
+                url        : `/comments/${postId}`,
+                data       : JSON.stringify({comment: comment}),
+                dataType   : "json",
+                success    : function (response) {
+                    alert(response["message"]);
+                    window.location.reload("/post.html");
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        };
+
+        function deletePost(postId, password) {
+            $.ajax({
+                type       : "DELETE",
+                contentType: "application/json; charset=utf-8",
+                url        : `/posts/${postId}`,
+                data       : JSON.stringify({password: password}),
+                success    : function (response) {
+                    alert("삭제 완료 !");
+                    window.location.reload("/post.html");
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        };
+
+
+        function updatePost(postId, update_content, password) {
+            $.ajax({
+                type       : "PATCH",
+                contentType: "application/json; charset=utf-8",
+                url        : `/posts/${postId}`,
+                data       : JSON.stringify({content: update_content, password: password}),
+                dataType   : "json",
+                success    : function (response) {
+                    window.location.reload("/post.html");
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        };
+
+
+        function get_info(postId) {
+            $.ajax({
+                type       : "GET",
+                contentType: "application/json; charset=utf-8",
+                url        : `/posts/${postId}`,
+                data       : {},
+                dataType   : "json",
+                success    : function (response) {
+                    $("#comment-info").empty();
+                    const postInfo = response["post"];
+                    const postId = postInfo["postId"];
+                    const title = postInfo["title"];
+                    const nickname = postInfo["nickname"];
+                    const content = postInfo["content"];
+                    const createdAt = postInfo["createdAt"];
+                    const updatedAt = postInfo["updatedAt"];
+
+                    const likes = response["likes"].length;
+
+                    let temp_html = `
+                                    <h2>제목 : ${title}</h2>
+                                    <h3>작성자 : ${nickname}</h3>
+                                    <p>내용 : ${content}</p>
+                                    <span>생성 날짜 : ${createdAt}</span><br/>
+                                    <span>수정 날짜 : ${updatedAt}</span><br/>
+                                    <span>좋아요 갯수 : ${likes}</span><br/>
+                                    <input type="text" id="update-content" placeholder="content update"/><br/>
+                                    <input type="password" id="password" placeholder="your password"/><br/>
+                                    <p>글 삭제 시에도 password를 입력해주세요.</p>
+                                    <button onclick="updatePost(${postId}, $('#update-content').val(), $('#password').val())">수정하기</button><br/>
+                                    <button onclick="deletePost(${postId}, $('#password').val())">삭제하기</button>
+                                    <hr/>
+                                    <input type="text" id="new-comment" placeholder="write comment here."/><br/>
+                                    <button onclick="create_comment(${postId}, $('#new-comment').val())">댓글달기</button>
+                                    `;
+                    $("#post-info").empty();
+                    $("#post-info").append(temp_html);
+                    $("#post-info").append(`<button onclick="toggle_like(${postId})">좋아요</button>`);
+
+                    const comments = response["comments"];
+                    for (let i = 0; i < comments.length; i++) {
+                        let commentId = comments[i]["commentId"];
+                        let nickname = comments[i]["nickname"];
+                        let comment = comments[i]["comment"];
+                        let createdAt = comments[i]["createdAt"];
+
+                        let temp_html = `<li>${nickname} - ${comment} / ${createdAt}</li><br/>
+                                 <input type="text" id="new-comment${commentId}" placeholder="update comment here."/>
+                                 <button onclick="update_comment(${commentId}, $('#new-comment${commentId}').val())">댓글수정</button><button onclick="delete_comment(${commentId})">댓글삭제</button>`;
+
+
+                        $("#comment-info").append(temp_html);
+                    }
+
+                },
+                error      : function (err) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        };
+
+        function get_list() {
+            $.ajax({
+                type       : "GET",
+                contentType: "application/json; charset=utf-8",
+                datatype   : "JSON",
+                url        : "/posts",
+                data       : {},
+                success    : function (response) {
+                    let rows = response;
+                    for (let i = 0; i < rows.length; i++) {
+                        let title = rows[i]["title"];
+                        let postId = rows[i]["postId"];
+                        let nickname = rows[i]["nickname"];
+                        let createdAt = rows[i]["createdAt"];
+
+                        let temp_html = `<li><a href="#" onclick="get_info(${postId})">${title}[작성자 : ${nickname} - ${createdAt}]</a></li>`;
+
+                        $("#posts-list").append(temp_html);
+                    }
+                },
+                error      : function (error) {
+                    alert(error.responseJSON.errorMessage);
+                }
+            });
+        }
+
+    </script>
+
+</head>
+<body>
+<button onclick="window.location.href='/login.html'">로그인하기</button>
+<h1>Post Page</h1>
+<form id="posting-form">
+    <h4>포스팅하기</h4>
+    <input type="text" id="post-title" placeholder="write title" name="title"/>
+    <input type="text" id="post-content" placeholder="write content" name="content"/>
+</form>
+<button onclick="create_post()">게시글 작성</button>
+<button onclick="get_likes()">내가 좋아요한 글 가져오기</button>
+<div>
+    <ul id="like-posts">
+
+    </ul>
+</div>
+<hr/>
+<div id="post-info">
+</div>
+<div>
+    <ul id="comment-info">
+
+    </ul>
+</div>
+<hr/>
+<ul id="posts-list">
+    <li><a href="/post"></a></li>
+</ul>
+</body>
+
+</html>
