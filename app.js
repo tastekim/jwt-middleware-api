@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require("express");
 const app = express();
 const {Op} = require("sequelize");
@@ -22,6 +21,6 @@ app.get("/", function (req, res) {
 })
 
 
-app.listen(process.env.PORT, "127.0.0.1", () => {
-    console.log("Server running on port 3306");
+app.listen(3000, "127.0.0.1", () => {
+    console.log("Server running on port 3000");
 });
