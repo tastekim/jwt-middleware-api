@@ -19,15 +19,15 @@
                 data       : JSON.stringify({nickname: nickname, password: password}),
                 success    : function (response) {
                     localStorage.setItem("token", response.token);
-                    window.location.href = "/post.html";
+                    window.location.href = "/assets/post.html";
                 },
                 error      : function (error) {
                     if (error.responseJSON.errorMessage === "이미 로그인이 되어있습니다."){
                         alert(error.responseJSON.errorMessage)
-                        window.location.href = "/post.html";
+                        window.location.href = "/assets/post.html";
                     } else {
                         alert(error.responseJSON.errorMessage)
-                        window.location.href = "/post.html";
+                        window.location.href = "/assets/post.html";
                     }
                 }
             });
@@ -40,7 +40,7 @@
     <input type="text" id="nickname" placeholder="your nickname"/>
     <input type="password" id="password" placeholder="your password"/>
     <button onclick="sign_in()" name="login">Login</button>
-    <button onclick="window.location.href='/signup.html'" name="signup">Sign up</button>
+    <button onclick="window.location.href='/assets/signup.html'" name="signup">Sign up</button>
 </div>
 </body>
 

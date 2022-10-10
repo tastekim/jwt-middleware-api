@@ -18,7 +18,7 @@ app.use([Sign, Posts, Comments, Likes]);
 
 
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "../4w-prac/assets", "post.html"))
+    res.sendFile(path.join(__dirname, "/4w-prac/assets", "/assets/post.html"))
 })
 
 
