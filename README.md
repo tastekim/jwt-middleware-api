@@ -11,4 +11,5 @@
 - pm2 로 logging.
 
 ## 🔍 ERD
-![](../../../Downloads/drawSQL-export-2022-10-12_00_11.png)
+
+![drawSQL-export-2022-10-12_00_11](https://user-images.githubusercontent.com/112174727/195131570-ae92384c-830d-4881-90bd-82e633a6da1f.png)
