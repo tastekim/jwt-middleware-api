@@ -37,7 +37,7 @@
                 dataType   : "json",
                 success    : function (response) {
                     alert(response["message"]);
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error      : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -80,7 +80,7 @@
                 data    : {},
                 dataType: "json",
                 success : function (response) {
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 }
             });
         }
@@ -93,7 +93,7 @@
                 dataType: "json",
                 success : function (response) {
                     alert(response["message"]);
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error   : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -110,7 +110,7 @@
                 dataType   : "json",
                 success    : function (response) {
                     alert(response["message"]);
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error      : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -127,7 +127,7 @@
                 dataType   : "json",
                 success    : function (response) {
                     alert(response["message"]);
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error      : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -143,7 +143,7 @@
                 data       : JSON.stringify({password: password}),
                 success    : function (response) {
                     alert("삭제 완료 !");
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error      : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -160,7 +160,7 @@
                 data       : JSON.stringify({content: update_content, password: password}),
                 dataType   : "json",
                 success    : function (response) {
-                    window.location.href = "/assets/post.html";
+                    window.location.href = "/post.html";
                 },
                 error      : function (error) {
                     alert(error.responseJSON.errorMessage);
@@ -260,7 +260,7 @@
 
 </head>
 <body>
-<button onclick="window.location.href='/assets/login.html'">로그인하기</button>
+<button onclick="window.location.href='/login.html'">로그인하기</button>
 <h1>Post Page</h1>
 <form id="posting-form">
     <h4>포스팅하기</h4>

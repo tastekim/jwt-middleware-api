@@ -19,16 +19,14 @@
                 url        : "/signup",
                 data       : JSON.stringify({nickname: nickname, password: password, confirmPassword: password2}),
                 success    : function (response) {
-                    console.log(response)
-                    alert("회원가입성공 !", function () {
-                        window.location.href = "/assets/login.html";
-                    })
+                    alert(response["message"]);
+                    window.location.href = "/post.html";
 
                 },
                 error : function (error) {
                     if (error.responseJSON.errorMessage === "이미 로그인이 되어있습니다."){
                         alert(error.responseJSON.errorMessage)
-                        window.location.href = "/assets/post.html";
+                        window.location.href = "/post.html";
                     } else {
                         alert(error.responseJSON.errorMessage)
                     }
@@ -43,7 +41,7 @@
     <input type="password" id="sign-password" placeholder="your password"/>
     <input type="password" id="sign-password2" placeholder="confirm your password"/>
     <button onclick="sign_up()" name="signup">signup</button>
-    <button onclick="window.location.href='/assets/login.html'" name="cancel">cancel</button>
+    <button onclick="window.location.href='/login.html'" name="cancel">cancel</button>
 </div>
 </body>
 

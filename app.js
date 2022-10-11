@@ -10,17 +10,17 @@ const Likes = require("./services/likes");
 const path = require("path");
 
 app.use(express.urlencoded({ extended: false }));
-app.use(express.static("assets"));
 app.use(bodyParser.json());
 app.use(cookieParser());
 app.use([Sign, Posts, Comments, Likes]);
+app.use(express.static("assets"));
 
 
 app.get("/", function (req, res) {
-    res.sendFile(path.join(__dirname, "/4w-prac/assets", "/assets/post.html"))
+    res.sendFile(path.join(__dirname, "assets", "/post.html"))
 })
 
 
 app.listen(3000, "127.0.0.1", () => {
-    console.log("Server running on port 3000");
+    console.log("Server running on port 5005");
 });

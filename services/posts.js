@@ -37,32 +37,37 @@ router.get("/posts", async (req, res) => {
 
         res.json(posts);
     } catch (err) {
-        res.status(500).json({errorMessage: err});
+        res.status(500).json({errorMessage: "GET posts 에러"});
     }
 });
 
 // 특정 글 조회
 router.get("/posts/:postId", async (req, res) => {
-    const {postId} = req.params;
+    try {
+        const {postId} = req.params;
 
-    const post = await Posts.findOne({
-        where: {postId},
-    });
+        const post = await Posts.findOne({
+            where: {postId},
+        });
 
-    const comments = await Comments.findAll({
-        where     : {postId: postId},
-        order     : [["createdAt", "DESC"]],
-        attributes: ["commentId", "postId", "nickname", "comment", "createdAt", "updatedAt"]
-    });
+        const comments = await Comments.findAll({
+            where     : {postId: postId},
+            order     : [["createdAt", "DESC"]],
+            attributes: ["commentId", "postId", "nickname", "comment", "createdAt", "updatedAt"]
+        });
 
-    const likecount = await Likes.findAll({
-        where: {
-            postId: postId,
-        }
-    });
+        const likecount = await Likes.findAll({
+            where: {
+                postId: postId,
+            }
+        });
 
 
-    res.json({post: post, comments: comments, likes: likecount});
+        res.json({post: post, comments: comments, likes: likecount});
+    } catch (err) {
+        res.status(500).json({errorMessage: "GET posts 에러"});
+    }
+
 });
 
 
