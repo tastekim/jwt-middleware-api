@@ -22,5 +22,5 @@ app.get("/", function (req, res) {
 
 
 app.listen(3000, "127.0.0.1", () => {
-    console.log("Server running on port 5005");
+    console.log("Server running on port 3000");
 });
